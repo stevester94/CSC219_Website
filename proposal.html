@@ -4,13 +4,23 @@ body {
     margin-right: 20%;
 }
 
+.container {
+    display: flex; /* or inline-flex */
+}
+
+.item {
+  flex-grow: 0; /* default 0 */
+}
+
+figcaption {
+    font-size: 13;
+}
+
 </style>
 
 <body>
-<pre>
-CSC219 Project Proposal
-Steven Mackey
-</pre>
+<h1 style="text-align:center;">CSC219 Project Proposal - Steven Mackey, Group 20</h1>
+<br>
 <h1>Introduction and Background</h1>
 The term software defined radios (SDRs) traces its origins back to the 1970’s in the US Defense Industry. The general
 purpose of SDRs is simply to collect radio data and digitize it so that further processing can be done on General
@@ -23,37 +33,55 @@ demodulate to the original data/signal being broadcast (audio, digital data, etc
 civilian sector, this is incredibly valuable for military applications.
 
 <h1>The Problem (Signal Characterization)</h1>
-<img src="dataset_time.png">
+
+<div class="container">
+    <figure>
+        <img src="mozart_modulated.gif">
+        <figcaption>An audio signal, and the same signal Frequency Modulated (Generated with GNURadio)</figcaption>
+    </figure>
+    <div class="item">
+        <figure>
+            <img src="gnu_radio_modulator.png" style="width: 100%">
+            <figcaption>A simple GNURadio data flow to modulate Mozart audio</figcaption>
+        </figure>
+        <br><br>
+        <figure>
+            <img src="dataset_time.png" alt="my img" />
+            <figcaption>A visualization of different signal types (<a href="https://www.deepsig.io/datasets">deepsig.io</a>)</figcaption>
+        </figure>
+    </div>
+</div>
 <br>
-A visualization of different signal types (from deepsig.io[1])
+
 <br>
 <br>
-<img src="mozart_modulated.gif">
-<br>
-What an audio signal looks like, and what the same signal looks like when Frequency Modulated (What your car radio is processing)
-<br>
-<br>
-In the past, signal characterization relied heavily on “carefully hand-
-crafted specialized feature extractors for specific signal types”; that is to say Subject Matter Experts (SMEs) in the
+<b>In the past, signal characterization relied heavily on “carefully hand-
+crafted specialized feature extractors for specific signal types”[1]</b>.That is to say Subject Matter Experts (SMEs) in the
 field of Digital Signal Processing (DSP) creating often complicated and inflexible algorithms for determining very
-specific signal types. In more familiar terms, this is akin to writing mathematical algorithms to determine handwriting.
+specific signal types. In more familiar terms, <b>this is akin to writing mathematical algorithms to determine handwriting.</b>
 
 The handcrafted algorithms currently in use in the field of signal characterization perform well, but are stove-piped
-to the signals that they are designed to classify. Again, in terms of hand-writing, it would be as if a classifier would
-only be suitable for the english alphabet, but not for other character systems like Japanese Kanji or Arabic script.
-This means that when an unknown signal is identified in the environment, there is a <bold>huge</bold> turn around time
+to the signals that they are designed to classify. Again, in terms of hand-writing, <b>it would be as if a classifier architecture would
+only be suitable for the english alphabet, but not for other character systems like Japanese Kanji or Arabic script.</b>
+This means that when an unknown signal is identified in the environment, there is a <b>huge</b> turn around time
 in designing a classifier for it. Often the turn around time is so long that by the time the classifier is fielded, it is
 no longer relevant.
 
 <h1>Proposed Solution</h1>
-Neural networks are an obvious solution to this problem. They have the capability of being trained against arbitrary data,
+<figure>
+    <img src="neural_net.png" style="width:60%">
+    <figcaption>Simplified diagram of proposed architecture</figcaption>
+</figure>
+<b>Neural networks are an obvious solution to this problem.</b> They have the capability of being trained against arbitrary data,
 given that the data is labeled. This flexibility makes neural networks an ideal candidate for replacing the stove-piped 
-algorithms in use today. <br>
+algorithms in use today. Neural networks have already been shown to perform as well as the traditional algorithm approach[1], and sometimes even outperform them.
+My goal is replicate previous results, and expand upon them.
+<br>
 There are many approaches that I would like to explore, but given the time constraints of the project, I have broken them down
 into a roadmap of dependencies. The first 3 phases are the minimum goals for the project, with the rest being stretch goals.
 Some stretch goals may not be feasible given time constraints or may not make sense as I explore the problem further.
  Unexepected difficulties may push some approaches back in the road map and some approaches may prove more 
- useful, so that the project roadmap will need to adjust. I will explain in detail in the next section.
+ useful, so that the project roadmap will need to adjust. I will explain in detail in the milestones section.
 
 <h1>Datasets</h1>
 A rich dataset of heavily-vetted radio signal samples is freely available at <a href="https://www.deepsig.io/datasets">https://www.deepsig.io/datasets</a>
@@ -64,7 +92,7 @@ modulation types which has been heavily validated." ... "2 million examples, eac
 <h1>Milestones</h1>
 <img src="CSC219_Roadmap.svg" style="width:90%">
 <h3>Phase 1</h3>
-Download a set of labeled radio data (freely available from https://www.deepsig.io/). Using TensorFlow, train a classifer against a subset of those
+Download a set of labeled radio data (freely available from <a href="https://www.deepsig.io/datasets">https://www.deepsig.io/</a>). Using TensorFlow, train a classifer against a subset of those
 using just the raw radio data (no other features) as the input of the model. This is a minimal proof of concept, to show that the approach
 is feasible.
 
@@ -73,7 +101,7 @@ Expand the subset of signal types, evaluate the performance of the classifier ag
 classifer will not do as well when the signal types are wildly different. In terms of handwriting, it would be similar to a a single model
 being used for very different character systems (Kanji and English). Evaluate how well specially trained classifiers do when compared to a generic classifier.
 
-<h3>Phase 3</h3>
+<h3>Phase 3 (Target deadline 4/12)</h3> 
 Implement an algorithm to calculate a finger print of the input signal, and train a classifier against that.
     - A coworker of mine is advising a group at CSUS in their senior project in calculating the "Principal Eigenvector" of a signal. That Eigenvector may provide a
       semi-unique fingerprint of the input signal. That fingerprint may then be used to train a model, and used for classification, with the advantage that
@@ -123,4 +151,7 @@ everything that is working so far will work the same with real hardware, though 
     <li>K nearest neighbor</li>
         If time permits, attempt to use KNN or similar clustering algorithms to cluster unknown signals
 </ul>
+<h1>References</h1>
+[1] O’Shea, Timothy James, Tamoghna Roy, and T. Charles Clancy. "Over-the-air deep learning based radio signal
+classification." IEEE Journal of Selected Topics in Signal Processing 12.1 (2018): 168-179.
 </body>
